@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BookRecommender</string>
+    <string name="Write_word">Book Title</string>
+    <string name="find">Find</string>
+</resources>
