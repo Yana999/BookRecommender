@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@drawable/back_ground_app">
+    android:background="@drawable/back_ground_app"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -12,46 +12,42 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="70dp"
+            app:srcCompat="@drawable/lamp2" />
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="70dp"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="10dp"
-                app:srcCompat="@drawable/lamp2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/button2"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:text="Catalog"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:text="Catalog" />
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button3"
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
+                android:text="Recommendations"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:layout_height="50dp"
-                android:textStyle="bold"
-                android:text="Recommendations" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 

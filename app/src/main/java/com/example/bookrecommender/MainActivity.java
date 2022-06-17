@@ -20,10 +20,11 @@ public class MainActivity extends AppCompatActivity {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    Intent intent = new Intent (MainActivity.this, Catalog.class);
-                    startActivity(intent); finish();
-                }catch (Exception e){
+                try {
+                    Intent intent = new Intent(MainActivity.this, Catalog.class);
+                    startActivity(intent);
+                    finish();
+                } catch (Exception e) {
 
                 }
             }
@@ -32,17 +33,19 @@ public class MainActivity extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    Intent intent = new Intent (MainActivity.this, Test.class);
-                    startActivity(intent); finish();
-                }catch (Exception e){
+                try {
+                    Intent intent = new Intent(MainActivity.this, Test.class);
+                    startActivity(intent);
+                    finish();
+                } catch (Exception e) {
 
                 }
             }
         });
-        //Рвзвернуть игру на весь экран - нач
+
+        //Рвзвернуть игру на весь экран
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        //Рвзвернуть игру на весь экран - кон
+        //Рвзвернуть игру на весь экран
     }
 }

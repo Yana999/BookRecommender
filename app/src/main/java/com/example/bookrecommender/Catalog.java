@@ -15,13 +15,12 @@ public class Catalog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.catalog );
 
-        //Рвзвернуть игру на весь экран - нач
+        //Рвзвернуть игру на весь экран
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        //Рвзвернуть игру на весь экран - кон
 
     }
-    //Системная кнопка "Назад" - начало
+    //Системная кнопка "Назад"
     @Override
     public void onBackPressed(){
         try{
@@ -31,6 +30,5 @@ public class Catalog extends AppCompatActivity {
 
         }
     }
-    //Системная кнопка "Назад" - конец
 
 }

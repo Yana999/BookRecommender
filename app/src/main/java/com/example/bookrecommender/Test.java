@@ -1,7 +1,5 @@
 package com.example.bookrecommender;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +10,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,7 +29,7 @@ import okhttp3.Response;
 
 public class Test extends AppCompatActivity {
 
-    private String url = "https://recommendationsfrombook.herokuapp.com/predict?";
+    private String url = "https://bookrecwebapp.herokuapp.com/api/v1/predict";
     private String postBodyString;
     private MediaType mediaType;
     private RequestBody requestBody;
@@ -39,7 +42,8 @@ public class Test extends AppCompatActivity {
         getSupportActionBar().hide();// Убрать ActionBar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
-        //Рвзвернуть игру на весь экран - нач
+
+        //Рвзвернуть игру на весь экран
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         result = findViewById(R.id.textView2);
@@ -49,22 +53,14 @@ public class Test extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!inputBook.getText().toString().isEmpty()) {
-                    String url1 = url + "book=" + inputBook.getText().toString().trim();
-                    postRequest("your message here", url1);
+                    String requestBody = inputBook.getText().toString().trim();
+                    postRequest(requestBody, url);
                     result.setText("Searching...");
                 } else {
                     Toast.makeText(Test.this, "Please, enter the title of book!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        //Рвзвернуть игру на весь экран - кон
-    }
-
-    private RequestBody buildRequestBody(String msg) {
-        postBodyString = msg;
-        mediaType = MediaType.parse("text/plain");
-        requestBody = RequestBody.create(postBodyString, mediaType);
-        return requestBody;
     }
 
     private String changeCharset(String s) {
@@ -78,72 +74,7 @@ public class Test extends AppCompatActivity {
         }
     }
 
-    private void postRequest(String message, String URL) {
-        RequestBody requestBody = buildRequestBody(message);
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request
-                .Builder()
-                .post(requestBody)
-                .url(URL)
-                .build();
-        try {
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(final Call call, final IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(Test.this, "Something went wrong:" + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            call.cancel();
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onResponse(Call call, final Response response) throws IOException {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-
-                                //String s= changeCharset(response.body().string());
-                                //  s = changeCharset(s);
-                                String m = response.body().string();
-                                byte[] inputS = m.getBytes("Unicode");
-                                String s = new String(inputS, "UTF-8");
-
-                                String s1 = s.substring(s.indexOf("\"") + 1, s.lastIndexOf("\""));
-                                String[] recommendations = s1.split(";");
-                                String text = "";
-                                if (recommendations.length > 1) {
-
-                                    for (int i = 0; i < recommendations.length - 1; i++) {
-                                        if (i == recommendations.length - 1) {
-                                            text += (i + 1) + ". " + recommendations[i];
-                                        } else {
-                                            text += (i + 1) + ". " + recommendations[i] + ";\n";
-                                        }
-                                    }
-                                } else {
-                                    text = recommendations[0];
-                                }
-                                result.setText(text);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-
-                }
-            });
-        } catch (Exception e) {
-            System.out.println("error");
-        }
-    }
-
-    //Системная кнопка "Назад" - начало
+    //Системная кнопка "Назад"
     @Override
     public void onBackPressed() {
         try {
@@ -154,5 +85,79 @@ public class Test extends AppCompatActivity {
 
         }
     }
-    //Системная кнопка "Назад" - конец
+
+    private void postRequest(String message, String URL) {
+        try {
+            OkHttpClient okHttpClient = new OkHttpClient();
+
+            String json = "{\"input\":\"" + message.trim() + "\"}";
+
+            RequestBody body = RequestBody.create(
+                    MediaType.parse("application/json"), json);
+
+            Request request = new Request
+                    .Builder()
+                    .post(body)
+                    .url(URL)
+                    .build();
+
+            try {
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(Test.this, "Something went wrong:" + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                call.cancel();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    String m = response.body().string();
+
+//                                byte[] inputS = m.getBytes("Unicode");
+//                                String s = new String(inputS, "UTF-8");
+
+//                                String s1 = s.substring(s.indexOf("\"") + 1, s.lastIndexOf("\""));
+//                                String[] recommendations = s1.split(";");
+//                                String text = "";
+//                                if (recommendations.length > 1) {
+//
+//                                    for (int i = 0; i < recommendations.length - 1; i++) {
+//                                        if (i == recommendations.length - 1) {
+//                                            text += (i + 1) + ". " + recommendations[i];
+//                                        } else {
+//                                            text += (i + 1) + ". " + recommendations[i] + ";\n";
+//                                        }
+//                                    }
+//                                } else {
+//                                    text = recommendations[0];
+//                                }
+                                    result.setText(m);
+                                }catch (Exception ee){
+                                    ee.printStackTrace();
+                                }
+                            }
+                        });
+
+
+                    }
+                });
+            } catch (Exception e) {
+                System.out.println("error");
+            }
+        }catch (Exception e1){
+            e1.printStackTrace();
+        }
+    }
+
+
 }
