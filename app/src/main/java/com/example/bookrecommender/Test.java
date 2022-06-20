@@ -29,7 +29,7 @@ import okhttp3.Response;
 
 public class Test extends AppCompatActivity {
 
-    private String url = "https://bookrecwebapp.herokuapp.com/api/v1/predict";
+    private String url = "https://bookrecwebapp.herokuapp.com/api/v1/predict-by-name";
     private String postBodyString;
     private MediaType mediaType;
     private RequestBody requestBody;
@@ -122,39 +122,29 @@ public class Test extends AppCompatActivity {
                             public void run() {
                                 try {
                                     String m = response.body().string();
-
-//                                byte[] inputS = m.getBytes("Unicode");
-//                                String s = new String(inputS, "UTF-8");
-
-//                                String s1 = s.substring(s.indexOf("\"") + 1, s.lastIndexOf("\""));
-//                                String[] recommendations = s1.split(";");
-//                                String text = "";
-//                                if (recommendations.length > 1) {
-//
-//                                    for (int i = 0; i < recommendations.length - 1; i++) {
-//                                        if (i == recommendations.length - 1) {
-//                                            text += (i + 1) + ". " + recommendations[i];
-//                                        } else {
-//                                            text += (i + 1) + ". " + recommendations[i] + ";\n";
-//                                        }
-//                                    }
-//                                } else {
-//                                    text = recommendations[0];
-//                                }
-                                    result.setText(m);
-                                }catch (Exception ee){
+                                    m = m.replace("[", "");
+                                    m = m.replace("]", "");
+                                    m = m.replace("\"", "");
+                                    m = m.replace("\\n", "");
+                                    String[] recommendations = m.split(",");
+                                    String text = "";
+                                    for (int i = 0; i < recommendations.length; i++) {
+                                        text += recommendations[i] + "\n";
+                                    }
+                                    result.setText(text);
+                                } catch (
+                                        Exception ee) {
                                     ee.printStackTrace();
                                 }
                             }
                         });
-
-
                     }
                 });
             } catch (Exception e) {
                 System.out.println("error");
             }
-        }catch (Exception e1){
+        } catch (
+                Exception e1) {
             e1.printStackTrace();
         }
     }
